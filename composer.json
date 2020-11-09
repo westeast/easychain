@@ -3,7 +3,7 @@
     "description": "Ethernum rpc api php client",
     "type": "library",
     "require": {
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^6.5.3|^7.2",
         "php": "^7.0",
         "phpunit/phpunit": "^9.4"
     },
