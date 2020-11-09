@@ -34,9 +34,9 @@ class RpcJson{
             ]);
             $formatted=json_decode($res->getBody()->getContents(),true);
 
-            if(isset($formatted->error))
+            if(isset($formatted['error']))
             {
-                throw new RPCException($formatted->error->message, $formatted->error->code);
+                throw new RPCException($formatted['error']['message'], $formatted['error']['code']);
             }
             else
             {
