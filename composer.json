@@ -1,11 +1,18 @@
 {
     "name": "westeast/easychain",
     "description": "Ethereum rpc api php client",
+    "keywords": [
+        "framework",
+        "laravel",
+        "ethereum",
+        "Ethereum",
+        "rpc client php"
+    ],
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^6.5.3|^7.2",
         "php": "^7.0",
-        "phpunit/phpunit": "^8.5.4|^9.4"
+        "phpunit/phpunit": "^5.7|^8.5.4|^9.4"
     },
     "license": "MIT",
     "authors": [
@@ -14,5 +21,21 @@
             "email": "510578774@qq.com"
         }
     ],
-    "minimum-stability": "beta"
+    "minimum-stability": "beta",
+    "autoload": {
+        "psr-4": {
+            "Westeast\\EasyChain\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Westeast\\EasyChain\\EasyChainServiceProvider"
+            ],
+            "aliases": {
+                "Ethereum": "Westeast\\EasyChain\\Facade\\Ethereum",
+                "Bitcoin": "Westeast\\EasyChain\\Facade\\Bitcoin"
+            }
+        }
+    }
 }
