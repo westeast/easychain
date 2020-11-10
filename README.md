@@ -5,11 +5,16 @@ blockchain ethereum jsonrpc api rpc api
 ```
 composer require westeast/easychain
 
-php artisan vendor:publish -provider="Westeast\EasyChain\EasyChainProvider" --tag="config"
+php artisan vendor:publish --provider="Westeast\EasyChain\EasyChainServiceProvider"
+输出如下内容
+Copied File [/vendor/westeast/easychain/config/easychain.php] To [/config/easychain.php]
+Publishing complete.
 
 
-app/config中加入provoider
+app/config中加入provoider  > laravel 5.4时不加也生效
 Westeast\EasyChain\EasyChainProvider
+
+如果 有问题记得清理一下config cache;
 
 ```
 
