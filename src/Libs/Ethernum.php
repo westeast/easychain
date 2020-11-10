@@ -375,11 +375,11 @@ class Ethereum extends RpcJson
      * eth_accounts
      * eth_getCompilers
      * eth_getWork
-     * 所有的 ethernum方法都可以使用此方法调用 $parameters对应着param=[];
+     * 所有的 ethereum方法都可以使用此方法调用 $parameters对应着param=[];
      */
     public function __call($method, $parameters)
     {
-        $method = str_replace('Array','',$method);
+        $method = str_replace('Origin','',$method);
         return $this->getInstance()->ether_request($method, $parameters);
     }
 }

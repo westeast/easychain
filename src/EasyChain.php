@@ -3,16 +3,16 @@ namespace Westeast\EasyChain;
 use Westeast\EasyChain\Libs\Ethereum;
 
 Class EasyChain {
-    private Ethereum $ethernum;
+    private Ethereum $ethereum;
     public $config;
-    public function get($name = 'ethernum'){
-        if($name == 'ethernum'){
-            if(empty($this->ethernum)){
+    public function get($name = 'ethereum'){
+        if($name == 'ethereum'){
+            if(empty($this->ethereum)){
                 $config = $this->config[$name];
                 Ethereum::$config = $config;
-                $this->ethernum = Ethereum::getInstance();
+                $this->ethereum = Ethereum::getInstance();
             }
-            return $this->ethernum;
+            return $this->ethereum;
         }
     }
 

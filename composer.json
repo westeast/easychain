@@ -1,6 +1,6 @@
 {
     "name": "westeast/easychain",
-    "description": "Ethernum rpc api php client",
+    "description": "Ethereum rpc api php client",
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^6.5.3|^7.2",
