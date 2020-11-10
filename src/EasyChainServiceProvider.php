@@ -5,7 +5,7 @@ namespace Westeast\EasyChain;
 use Illuminate\Support\ServiceProvider;
 use Westeast\EasyChain\EasyChain;
 
-class EasyChainProvider extends ServiceProvider
+class EasyChainServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
