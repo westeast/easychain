@@ -4,10 +4,25 @@ namespace Westeast\EasyChain\Libs;
 
 class Ethereum extends RpcJson
 {
+    private static $instance = null;
+    public static $config = [];
+    public static function getInstance()
+    {
+        //检测当前类属性$instance是否已经保存了当前类的实例
+        if (self::$instance == null) {
+            //如果没有,则创建当前类的实例
+            self::$instance = new self(
+                static::$config['host'],
+                static::$config['port']
+            );
+        }
+        //如果已经有了当前类实例,就直接返回,不要重复创建类实例
+        return self::$instance;
+    }
     private function ether_request($method, $params = array())
     {
         try {
-            $ret = $this->eth_request($method, $params);
+            $ret = $this->getInstance()->eth_request($method, $params);
             return $ret['result'];
         } catch (RPCException $e) {
             throw $e;
@@ -29,10 +44,10 @@ class Ethereum extends RpcJson
 
     public function eth_blockNumber($decode_hex = false)
     {
-        $block = $this->ether_request(__FUNCTION__);
+        $block = $this->getInstance()->ether_request(__FUNCTION__);
 
         if ($decode_hex) {
-            $block = $this->decode_hex($block);
+            $block = $this->getInstance()->decode_hex($block);
         }
 
         return $block;
@@ -40,10 +55,10 @@ class Ethereum extends RpcJson
 
     public function eth_getBalance($address, $block = 'latest', $decode_hex = false)
     {
-        $balance = $this->ether_request(__FUNCTION__, array($address, $block));
+        $balance = $this->getInstance()->ether_request(__FUNCTION__, array($address, $block));
 
         if ($decode_hex) {
-            $balance = $this->decode_hex($balance);
+            $balance = $this->getInstance()->decode_hex($balance);
         }
 
         return $balance;
@@ -51,15 +66,15 @@ class Ethereum extends RpcJson
 
     public function eth_getStorageAt($address, $at, $block = 'latest')
     {
-        return $this->ether_request(__FUNCTION__, array($address, $at, $block));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($address, $at, $block));
     }
 
     public function eth_getTransactionCount($address, $block = 'latest', $decode_hex = false)
     {
-        $count = $this->ether_request(__FUNCTION__, array($address, $block));
+        $count = $this->getInstance()->ether_request(__FUNCTION__, array($address, $block));
 
         if ($decode_hex) {
-            $count = $this->decode_hex($count);
+            $count = $this->getInstance()->decode_hex($count);
         }
 
         return $count;
@@ -67,32 +82,32 @@ class Ethereum extends RpcJson
 
     public function eth_getBlockTransactionCountByHash($tx_hash)
     {
-        return $this->ether_request(__FUNCTION__, array($tx_hash));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($tx_hash));
     }
 
     public function eth_getBlockTransactionCountByNumber($tx = 'latest')
     {
-        return $this->ether_request(__FUNCTION__, array($tx));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($tx));
     }
 
     public function eth_getUncleCountByBlockHash($block_hash)
     {
-        return $this->ether_request(__FUNCTION__, array($block_hash));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($block_hash));
     }
 
     public function eth_getUncleCountByBlockNumber($block = 'latest')
     {
-        return $this->ether_request(__FUNCTION__, array($block));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($block));
     }
 
     public function eth_getCode($address, $block = 'latest')
     {
-        return $this->ether_request(__FUNCTION__, array($address, $block));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($address, $block));
     }
 
     public function eth_sign($address, $input)
     {
-        return $this->ether_request(__FUNCTION__, array($address, $input));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($address, $input));
     }
 
     public function eth_sendTransaction($transaction)
@@ -100,7 +115,7 @@ class Ethereum extends RpcJson
         if (!is_a($transaction, EthereumTransaction::class)) {
             throw new \Exception('Transaction object expected');
         } else {
-            return $this->ether_request(__FUNCTION__, $transaction->toArray());
+            return $this->getInstance()->ether_request(__FUNCTION__, $transaction->toArray());
         }
     }
 
@@ -109,7 +124,7 @@ class Ethereum extends RpcJson
         if (!is_a($message, EthereumMessage::class)) {
             throw new \Exception('Message object expected');
         } else {
-            return $this->ether_request(__FUNCTION__, $message->toArray());
+            return $this->getInstance()->ether_request(__FUNCTION__, $message->toArray());
         }
     }
 
@@ -118,63 +133,63 @@ class Ethereum extends RpcJson
         if (!is_a($message, EthereumMessage::class)) {
             throw new \Exception('Message object expected');
         } else {
-            return $this->ether_request(__FUNCTION__, $message->toArray());
+            return $this->getInstance()->ether_request(__FUNCTION__, $message->toArray());
         }
     }
 
     public function eth_getBlockByHash($hash, $full_tx = true)
     {
-        return $this->ether_request(__FUNCTION__, array($hash, $full_tx));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($hash, $full_tx));
     }
 
     public function eth_getBlockByNumber($block = 'latest', $full_tx = true)
     {
-        return $this->ether_request(__FUNCTION__, array($block, $full_tx));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($block, $full_tx));
     }
 
     public function eth_getTransactionByHash($hash)
     {
-        return $this->ether_request(__FUNCTION__, array($hash));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($hash));
     }
 
     public function eth_getTransactionByBlockHashAndIndex($hash, $index)
     {
-        return $this->ether_request(__FUNCTION__, array($hash, $index));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($hash, $index));
     }
 
     public function eth_getTransactionByBlockNumberAndIndex($block, $index)
     {
-        return $this->ether_request(__FUNCTION__, array($block, $index));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($block, $index));
     }
 
     public function eth_getTransactionReceipt($tx_hash)
     {
-        return $this->ether_request(__FUNCTION__, array($tx_hash));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($tx_hash));
     }
 
     public function eth_getUncleByBlockHashAndIndex($hash, $index)
     {
-        return $this->ether_request(__FUNCTION__, array($hash, $index));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($hash, $index));
     }
 
     public function eth_getUncleByBlockNumberAndIndex($block, $index)
     {
-        return $this->ether_request(__FUNCTION__, array($block, $index));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($block, $index));
     }
 
     public function eth_compileSolidity($code)
     {
-        return $this->ether_request(__FUNCTION__, array($code));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($code));
     }
 
     public function eth_compileLLL($code)
     {
-        return $this->ether_request(__FUNCTION__, array($code));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($code));
     }
 
     public function eth_compileSerpent($code)
     {
-        return $this->ether_request(__FUNCTION__, array($code));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($code));
     }
 
     public function eth_newFilter($filter, $decode_hex = false)
@@ -182,10 +197,10 @@ class Ethereum extends RpcJson
         if (!is_a($filter, EthereumFilter::class)) {
             throw new \Exception('Expected a Filter object');
         } else {
-            $id = $this->ether_request(__FUNCTION__, $filter->toArray());
+            $id = $this->getInstance()->ether_request(__FUNCTION__, $filter->toArray());
 
             if ($decode_hex) {
-                $id = $this->decode_hex($id);
+                $id = $this->getInstance()->decode_hex($id);
             }
 
             return $id;
@@ -194,10 +209,10 @@ class Ethereum extends RpcJson
 
     public function eth_newBlockFilter($decode_hex = false)
     {
-        $id = $this->ether_request(__FUNCTION__);
+        $id = $this->getInstance()->ether_request(__FUNCTION__);
 
         if ($decode_hex) {
-            $id = $this->decode_hex($id);
+            $id = $this->getInstance()->decode_hex($id);
         }
 
         return $id;
@@ -205,10 +220,10 @@ class Ethereum extends RpcJson
 
     public function eth_newPendingTransactionFilter($decode_hex = false)
     {
-        $id = $this->ether_request(__FUNCTION__);
+        $id = $this->getInstance()->ether_request(__FUNCTION__);
 
         if ($decode_hex) {
-            $id = $this->decode_hex($id);
+            $id = $this->getInstance()->decode_hex($id);
         }
 
         return $id;
@@ -216,17 +231,17 @@ class Ethereum extends RpcJson
 
     public function eth_uninstallFilter($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function eth_getFilterChanges($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function eth_getFilterLogs($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function eth_getLogs($filter)
@@ -234,38 +249,38 @@ class Ethereum extends RpcJson
         if (!is_a($filter, EthereumFilter::class)) {
             throw new \Exception('Expected a Filter object');
         } else {
-            return $this->ether_request(__FUNCTION__, $filter->toArray());
+            return $this->getInstance()->ether_request(__FUNCTION__, $filter->toArray());
         }
     }
 
     public function eth_submitWork($nonce, $pow_hash, $mix_digest)
     {
-        return $this->ether_request(__FUNCTION__, array($nonce, $pow_hash, $mix_digest));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($nonce, $pow_hash, $mix_digest));
     }
 
     public function db_putString($db, $key, $value)
     {
-        return $this->ether_request(__FUNCTION__, array($db, $key, $value));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($db, $key, $value));
     }
 
     public function db_getString($db, $key)
     {
-        return $this->ether_request(__FUNCTION__, array($db, $key));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($db, $key));
     }
 
     public function db_putHex($db, $key, $value)
     {
-        return $this->ether_request(__FUNCTION__, array($db, $key, $value));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($db, $key, $value));
     }
 
     public function db_getHex($db, $key)
     {
-        return $this->ether_request(__FUNCTION__, array($db, $key));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($db, $key));
     }
 
     public function shh_version()
     {
-        return $this->ether_request(__FUNCTION__);
+        return $this->getInstance()->ether_request(__FUNCTION__);
     }
 
     public function shh_post($post)
@@ -273,75 +288,75 @@ class Ethereum extends RpcJson
         if (!is_a($post, WhisperPost::class)) {
             throw new \Exception('Expected a Whisper post');
         } else {
-            return $this->ether_request(__FUNCTION__, $post->toArray());
+            return $this->getInstance()->ether_request(__FUNCTION__, $post->toArray());
         }
     }
 
     public function shh_newIdentity()
     {
-        return $this->ether_request(__FUNCTION__);
+        return $this->getInstance()->ether_request(__FUNCTION__);
     }
 
     public function shh_hasIdentity($id)
     {
-        return $this->ether_request(__FUNCTION__);
+        return $this->getInstance()->ether_request(__FUNCTION__);
     }
 
     public function shh_newFilter($to = null, $topics = array())
     {
-        return $this->ether_request(__FUNCTION__, array(array('to' => $to, 'topics' => $topics)));
+        return $this->getInstance()->ether_request(__FUNCTION__, array(array('to' => $to, 'topics' => $topics)));
     }
 
     public function shh_uninstallFilter($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function shh_getFilterChanges($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function shh_getMessages($id)
     {
-        return $this->ether_request(__FUNCTION__, array($id));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($id));
     }
 
     public function personal_newAccount($passphrase)
     {
-        return $this->ether_request(__FUNCTION__, array($passphrase));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($passphrase));
     }
 
     public function personal_listAccounts()
     {
-        return $this->ether_request(__FUNCTION__);
+        return $this->getInstance()->ether_request(__FUNCTION__);
     }
 
     public function personal_unlockAccount($address, $passphrase, $duration = 300)
     {
-        return $this->ether_request(__FUNCTION__, array($address, $passphrase, $duration));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($address, $passphrase, $duration));
     }
 
     public function personal_lockAccount($address)
     {
-        return $this->ether_request(__FUNCTION__, array($address));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($address));
     }
 
     public function personal_ecRecover($message, $signature)
     {
-        return $this->ether_request(__FUNCTION__, array($message, $signature));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($message, $signature));
     }
 
     public function personal_importRawKey($keydata, $passphrase)
     {
-        return $this->ether_request(__FUNCTION__, array($keydata, $passphrase));
+        return $this->getInstance()->ether_request(__FUNCTION__, array($keydata, $passphrase));
     }
 
     public function personal_sendTransaction(EthereumTransaction $transaction, $passphrase)
     {
         $params = $transaction->toArray();
         array_push($params, $passphrase);
-        return $this->ether_request(__FUNCTION__, $params);
+        return $this->getInstance()->ether_request(__FUNCTION__, $params);
     }
 
     /**
@@ -365,6 +380,6 @@ class Ethereum extends RpcJson
     public function __call($method, $parameters)
     {
         $method = str_replace('Array','',$method);
-        return $this->ether_request($method, $parameters);
+        return $this->getInstance()->ether_request($method, $parameters);
     }
 }

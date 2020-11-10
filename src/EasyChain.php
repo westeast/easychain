@@ -9,10 +9,8 @@ Class EasyChain {
         if($name == 'ethernum'){
             if(empty($this->ethernum)){
                 $config = $this->config[$name];
-                $this->ethernum = new Ethereum(
-                    $config['host'],
-                    $config['port']
-                );
+                Ethereum::$config = $config;
+                $this->ethernum = Ethereum::getInstance();
             }
             return $this->ethernum;
         }
