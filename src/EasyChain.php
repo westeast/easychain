@@ -3,7 +3,7 @@ namespace Westeast\EasyChain;
 use Westeast\EasyChain\Libs\Ethereum;
 
 Class EasyChain {
-    private Ethereum $ethereum;
+    private $ethereum;
     public $config;
     public function get($name = 'ethereum'){
         if($name == 'ethereum'){
